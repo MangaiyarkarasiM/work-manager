@@ -1,0 +1,22 @@
+# Local editor settings
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
+
+# Frontend dependencies and generated output
+/frontend/node_modules/
+/frontend/dist/
+/frontend/dist-ssr/
+/frontend/.vite/
