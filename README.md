@@ -2,7 +2,7 @@
 
 A learning application built one checkpoint at a time with Spring Boot and React with TypeScript.
 
-The current checkpoint contains a backend application information endpoint, automated MVC tests, and a React TypeScript frontend generated with Vite. Both applications run independently; connecting the frontend to the backend is the next checkpoint.
+The current checkpoint connects the React TypeScript frontend to the Spring Boot `/api/info` endpoint through a Vite development proxy. The information panel handles loading, request failures, and cancellation. The backend also has automated MVC tests.
 
 ## Requirements
 
@@ -33,7 +33,7 @@ npm install
 npm run dev
 ```
 
-Open the Local URL printed by Vite, normally [http://localhost:5173](http://localhost:5173). If the port is occupied, Vite may select a different one; use the printed URL. Keep the terminal running, and press Ctrl+C in that terminal to stop the frontend. The backend can remain stopped during this checkpoint.
+Open the Local URL printed by Vite, normally [http://localhost:5173](http://localhost:5173). If the port is occupied, Vite may select a different one; use the printed URL. Keep the terminal running, and press Ctrl+C in that terminal to stop the frontend. Start the backend as described below to display application information. With the backend stopped, the frontend still loads and displays its API error state.
 
 From the `frontend` folder, run `npm run lint` for ESLint checks and `npm run build` for TypeScript checking and the production build. Generated output is written to `frontend/dist/`, relative to the repository root, and is ignored by Git.
 
@@ -48,6 +48,24 @@ From the `frontend` folder, run `npm run lint` for ESLint checks and `npm run bu
 7. Stop the application using IntelliJ's Stop button in the Run window.
 
 If port 8080 is already occupied, stop the other process or intentionally configure a different `server.port` and use that port in the URL.
+
+## Run the frontend/backend integration
+
+1. Start `WarehouseWorkManagerApplication` in IntelliJ and confirm the backend listens on port 8080.
+2. Open [http://localhost:8080/api/info](http://localhost:8080/api/info) and confirm the JSON response contains `applicationName` and `message`.
+3. In a separate terminal, start Vite from the `frontend` folder using `npm run dev`.
+4. Open the Local URL printed by Vite, normally [http://localhost:5173](http://localhost:5173). The Application Information panel should display the backend name and message.
+5. To check the proxy separately from the React component, open [http://localhost:5173/api/info](http://localhost:5173/api/info), using Vite's actual port if different. It should return the same JSON as the direct backend URL.
+
+The frontend requests the root-relative path `/api/info`. In [frontend/vite.config.ts](frontend/vite.config.ts), requests beginning with `/api` are forwarded to `http://localhost:8080`, preserving the path. The request flow is browser -> Vite -> Spring Boot -> Vite -> browser. If you change the backend port, update the proxy target and restart Vite.
+
+Keep both processes running for a successful API response. Stop the backend using IntelliJ's Stop button and Vite using Ctrl+C in its terminal. After restarting the backend, reload the frontend to request fresh information; recovery currently requires a reload.
+
+In DevTools, open Network and select Fetch/XHR to inspect the React request. Its URL shows the Vite origin, normally `http://localhost:5173/api/info`, because Vite performs the forwarding server-side. A direct address-bar visit appears as a document request, so use All or Doc when checking that way.
+
+The proxy is development configuration. A production build needs its own API routing when deployed.
+
+For loading, error, recovery, and cancellation checks, see the [frontend integration verification](frontend/README.md#verify-the-integration).
 
 ## API checkpoint
 
@@ -113,4 +131,4 @@ Keep future credentials in environment variables or deliberately ignored local c
 
 ## Next learning checkpoint
 
-Configure the frontend development proxy for `/api` to target the backend, then display the `/api/info` response with loading and error states.
+Build a static assignment list using a typed model, sample records, component props, and an empty state. Once that screen works, add a backend assignment-list endpoint and replace the sample records with API data.
