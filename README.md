@@ -1,23 +1,41 @@
 # Warehouse Work Manager
 
-A learning application built one checkpoint at a time with Spring Boot and, in the next checkpoint, React with TypeScript.
+A learning application built one checkpoint at a time with Spring Boot and React with TypeScript.
 
-The current checkpoint contains a backend application information endpoint and automated MVC tests. The frontend has not been generated yet.
+The current checkpoint contains a backend application information endpoint, automated MVC tests, and a React TypeScript frontend generated with Vite. Both applications run independently; connecting the frontend to the backend is the next checkpoint.
 
 ## Requirements
 
 - JDK 17. Configure both the IntelliJ project SDK and Gradle JVM to use Java 17.
 - IntelliJ IDEA with Java and Gradle support, or a terminal for the optional commands below.
 - Git for version control.
-- Internet access for the first Gradle import to download the wrapper distribution and dependencies.
+- Node.js and npm for the frontend. Setup was verified with Node.js 24.21.0 and npm 11.19.0.
+- Internet access for the first Gradle import and npm installation to download build tools and dependencies.
 
 The backend uses Spring Boot 4.1.1 and the Gradle 9.7.1 wrapper. A separate Gradle installation is not required. This checkpoint does not require a database or credentials.
 
 ## Repository layout
 
 - `backend/` - Spring Boot application, Gradle wrapper, configuration, and tests.
-- `.gitignore` - shared ignore rules and rules for the future frontend.
+- `frontend/` - React TypeScript application, Vite configuration, and npm package files. See the [frontend setup instructions](frontend/README.md#warehouse-work-manager).
+- `.gitignore` - shared ignore rules for both applications.
 - `README.md` - setup, verification, and learning notes.
+
+## Start and stop the frontend
+
+For prerequisites, verified versions, and detailed instructions, see the [frontend README](frontend/README.md#warehouse-work-manager).
+
+From the repository root, open a terminal and run:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Local URL printed by Vite, normally [http://localhost:5173](http://localhost:5173). If the port is occupied, Vite may select a different one; use the printed URL. Keep the terminal running, and press Ctrl+C in that terminal to stop the frontend. The backend can remain stopped during this checkpoint.
+
+From the `frontend` folder, run `npm run lint` for ESLint checks and `npm run build` for TypeScript checking and the production build. Generated output is written to `frontend/dist/`, relative to the repository root, and is ignored by Git.
 
 ## Start and stop the backend in IntelliJ
 
@@ -95,4 +113,4 @@ Keep future credentials in environment variables or deliberately ignored local c
 
 ## Next learning checkpoint
 
-Generate the React TypeScript frontend with Vite in a `frontend` folder and run it independently. After that, configure its development proxy for `/api` and display the backend information response with loading and error states.
+Configure the frontend development proxy for `/api` to target the backend, then display the `/api/info` response with loading and error states.
